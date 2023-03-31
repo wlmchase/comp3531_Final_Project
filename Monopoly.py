@@ -11,8 +11,9 @@ Wallace Mackenzie Chase
 Andrew Mackenzie
 """
 
- # initiates a board by setting up an array of all the tiles objects
- # one tile object for each tile on the board
+
+# initiates a board by setting up an array of all the tiles objects
+# one tile object for each tile on the board
 def createBoard():
     go = Tile(0, "GO", 0, 0)
     mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2)
@@ -31,7 +32,7 @@ def createBoard():
     jail = Tile(10, "Jail", 0, 0)
 
     st_charles_pl = Tile(11, "St. Charles Place", 140, 10)
-    electric = Tile(12, "Electric",150, 0)
+    electric = Tile(12, "Electric", 150, 0)
     states_ave = Tile(13, "States Ave", 140, 10)
     virginia_ave = Tile(14, "Virginia Ave", 160, 12)
 
@@ -77,7 +78,6 @@ def createBoard():
             penn_ave, short_line_railroad, chance_3, park_pl, lux_tax, boardwalk]
 
 
-
 class Game:
 
     # initiates the game by setting up the board and players
@@ -85,6 +85,7 @@ class Game:
     def __init__(self, player_count):
         self.turn_count = 0
         self.player_list = []
+        self.player_count = player_count
         self.current_player = None
         self.board = createBoard()
         self.winner = None
@@ -125,8 +126,8 @@ class Game:
     def handlePropertyTile(self, newTile):
         # TODO Fix
         if (newTile.bought):
-            if (self.current_player.money < self.board[self.current_player.place].rent):
-                    self.current_player.lost = True
+            if (self.current_player.money < self.board[self.current_player.tile_index].rent):
+                self.current_player.lost = True
             else:
                 if (self.enoughFunds(self.current_player, newTile)):
                     if self.chooseToBuy():
@@ -136,62 +137,69 @@ class Game:
                             return
                         else:
                             self.auctionOff(self.current_player, newTile)
-                        
+
     def handleRailroad(self):
-        
+        pass
+
     def handleUtility(self):
-    
+        pass
+
+    def handleGoToJail(self):
+        pass
+
     def handleTax(self):
-        
+        pass
+
     def handleParking(self):
-    
+        pass
+
     def handleGO(self):
-        
-    
-    def handleNewTileType(self, newTile):
-        if newTile.type == "property":
-            self.handlePropertyTile(newTile)
-        elif newTile.type == "railroad":
+        pass
+
+    def handleNewTileType(self, new_tile):
+        if new_tile.type == "property":
+            self.handlePropertyTile(new_tile)
+        elif new_tile.type == "railroad":
             self.handleRailroad()
-        elif newTile.type == "go to jail":
+        elif new_tile.type == "go to jail":
             self.handleGoToJail()
-        elif newTile.type == "chance" or newTile.type == "chest":
+        elif new_tile.type == "chance" or new_tile.type == "chest":
             # do nothing
             return
-        elif newTile.type == "utility":
+        elif new_tile.type == "utility":
             self.handleUtility()
-        elif newTile.type == "tax":
+        elif new_tile.type == "tax":
             self.handleTax()
-        elif newTile.type == "parking":
-            if (houseRules):
-                handleParking()
+        elif new_tile.type == "parking":
+            if houseRules:
+                self.handleParking()
             else:
                 # do nothing
                 return
         else:
             self.handleGO()
-    
+
     # play the game
     def play(self):
         self.current_player = self.players[0]
         index = 0
-        while (game.winner == None):
-            
-            
+        while game.winner is None:
+
             move = rollTwoDice()
             # check if past go
-            self.current_player.place = (self.current_player.place + move) % 40
+            self.current_player.tile_index = (self.current_player.tile_index + move) % 40
 
-            newTile = self.board[self.current_player.place]
-            
+            newTile = self.board[self.current_player.tile_index]
+
             self.handleNewTileType(self, newTile)
-            
-            if index == self.number_of_players:
+
+            if index == self.player_count:
                 index = -1
             index += 1
             self.current_player = self.players[index]
 
         return self.turn_count, self.trip_around_board, self.winner
+
 
 class Player:
     def __init__(self):
@@ -200,18 +208,21 @@ class Player:
         self.place = 0
         self.lost = False
 
+
 class Tile:
-    def __init__(self, place, name, cost, rent):
-        self.place = place
+    def __init__(self, tile_index, name, cost, rent):
+        self.tile_index = tile_index
         self.name = name
         self.cost = cost
         self.rent = rent
         self.bought = False
         self.owner = None
 
+
 # roll a 6 sided die
 def rollDice():
-    return np.random.randint(1,7)
+    return np.random.randint(1, 7)
+
 
 # roll two 6-sided die  and return whether or not they were doubles, and the total
 def rollTwoDice():
@@ -223,11 +234,10 @@ def rollTwoDice():
     return doubles, (roll1 + roll2)
 
 
-
 ###  Main loop  ###
 N = 500
-number_of_players = 4
+player_count = 4
 houseRules = False
 game_type_1_stats = []
 for i in range(N):
-    game = Game(num_players)
+    game = Game(player_count)
