@@ -94,8 +94,8 @@ class Game:
         # pythonic way of creating a list of player objects
         [self.players.append(Player()) for _ in range(player_count)]
 
-    def enough_funds(self, tile):
-        return self.current_player.money >= tile.cost
+    def enough_funds(self, player, tile):
+        return player.money >= tile.cost
 
     def choose_to_buy(self):
         # player has a randomized 70% chance
@@ -104,6 +104,8 @@ class Game:
         return decision_to_buy > 0.30
 
     def buy_property(self, player, property):
+        # deduct the cost of the property from the player's money
+        # then add the property to the player's list of properties
         player.money -= property.cost
         player.properties.append(property)
 
@@ -115,7 +117,7 @@ class Game:
         # if property cost is more than each player's money
         # remove them from the list of possible buyers
         for player in possible_buyers:
-            if player.money < property.cost:
+            if not self.enough_funds(player, property):
                 possible_buyers.remove(player)
 
         # if there are no possible buyers, the property is not bought
@@ -126,19 +128,46 @@ class Game:
         self.buy_property(buyer, property)
 
     def handle_property_tile(self, new_tile):
-        # TODO Fix
+        # if the tile the player lands on is already bought
+        # check if the player has enough money to pay the rent
         if new_tile.bought:
+
+            # if the player doesn't have enough money to pay the rent
+            # they lose the game
             if self.current_player.money < self.board[self.current_player.tile_index].rent:
                 self.current_player.lost = True
+                # TODO: remove player from list of players
+                #  and end the game if one player remains
+
+            # if the player has enough money to pay the rent
+            # deduct the rent from the player's money
+            # and add the rent to the owner's money
             else:
-                if self.enough_funds(self.current_player, new_tile):
-                    if self.choose_to_buy():
-                        self.buy_property(self.current_player, new_tile)
-                    else:
-                        if houseRules:
-                            return
-                        else:
-                            self.auction_off(self.current_player, new_tile)
+                self.current_player.money -= new_tile.rent
+                new_tile.owner.money += new_tile.rent
+
+        # if the tile the player lands on is not bought
+        # and the player has enough money to buy it
+        # and they would like to buy it
+        # then the player buys the property
+        elif not new_tile.bought and self.enough_funds(self.current_player, new_tile) and self.choose_to_buy():
+            self.buy_property(self.current_player, new_tile)
+
+        # if the tile the player lands on is not bought
+        # and the player either can't afford the property
+        # or they don't want to buy it
+        # and the house rules are disabled
+        # then the property is auctioned off
+        elif not new_tile.bought and not houseRules:
+            self.auction_off(new_tile)
+
+        # if the tile the player lands on is not bought
+        # and the player can't/won't buy the property
+        # and the house rules are enabled
+        # then nothing happens
+        else:
+            return
+
 
     def handle_railroad(self):
         pass
