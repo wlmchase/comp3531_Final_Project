@@ -94,8 +94,8 @@ class Game:
         # pythonic way of creating a list of player objects
         [self.players.append(Player()) for _ in range(player_count)]
 
-    def enough_funds(self, player, tile):
-        return player.money >= tile.cost
+    def enough_funds(self, tile):
+        return self.current_player.money >= tile.cost
 
     def choose_to_buy(self):
         # player has a randomized 70% chance
@@ -107,12 +107,12 @@ class Game:
         player.money -= property.cost
         player.properties.append(property)
 
-    def auction_off(self, player, property):
+    def auction_off(self, property):
         other_players = []
-        for i in range(len(self.players)):
-            if self.players[i] != player:
-                if self.players[i].money >= property.cost:
-                    other_players.append(self.players[i])
+        for player_index in range(self.player_count):
+            if self.players[player_index] != self.current_player:
+                if self.players[player_index].money >= property.cost:
+                    other_players.append(self.players[player_index])
 
         buyer = random.choice(other_players)
         self.buy_property(buyer, property)
