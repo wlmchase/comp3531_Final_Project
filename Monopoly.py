@@ -168,7 +168,6 @@ class Game:
         else:
             return
 
-
     def handle_railroad(self):
         pass
 
@@ -252,7 +251,7 @@ class Player:
     def __init__(self):
         self.money = 1500
         self.properties = []
-        self.place = 0
+        self.tile_index = 0
         self.lost = False
 
 
