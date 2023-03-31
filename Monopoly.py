@@ -108,13 +108,21 @@ class Game:
         player.properties.append(property)
 
     def auction_off(self, property):
-        other_players = []
-        for player_index in range(self.player_count):
-            if self.players[player_index] != self.current_player:
-                if self.players[player_index].money >= property.cost:
-                    other_players.append(self.players[player_index])
+        # create a list of players excluding the current player
+        possible_buyers = self.players.copy()
+        possible_buyers.remove(self.current_player)
 
-        buyer = random.choice(other_players)
+        # if property cost is more than each player's money
+        # remove them from the list of possible buyers
+        for player in possible_buyers:
+            if player.money < property.cost:
+                possible_buyers.remove(player)
+
+        # if there are no possible buyers, the property is not bought
+        if len(possible_buyers) == 0:
+            return
+
+        buyer = random.choice(possible_buyers)
         self.buy_property(buyer, property)
 
     def handle_property_tile(self, new_tile):
