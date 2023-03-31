@@ -84,7 +84,7 @@ class Game:
     # initializes the instance variables for the game object
     def __init__(self, player_count):
         self.turn_count = 0
-        self.player_list = []
+        self.players = []
         self.player_count = player_count
         self.current_player = None
         self.board = createBoard()
@@ -92,7 +92,7 @@ class Game:
         self.trip_around_board = 0
 
         # pythonic way of creating a list of player objects
-        [self.player_list.append(Player()) for _ in range(player_count)]
+        [self.players.append(Player()) for _ in range(player_count)]
 
     def enoughFunds(self, player, tile):
         if player.money >= tile.cost:
@@ -115,17 +115,17 @@ class Game:
     def auctionOff(self, player, property):
         propertyCost = property.cost
         otherPlayers = []
-        for i in range(len(self.player_list)):
-            if self.player_list[i] != player:
-                if self.player_list[i].money >= propertyCost:
-                    otherPlayers.append(self.player_list[i])
+        for i in range(len(self.players)):
+            if self.players[i] != player:
+                if self.players[i].money >= propertyCost:
+                    otherPlayers.append(self.players[i])
 
         buyer = random.choice(otherPlayers)
         self.buyProperty(buyer, property)
 
     def handlePropertyTile(self, newTile):
         # TODO Fix
-        if (newTile.bought):
+        if newTile.bought:
             if (self.current_player.money < self.board[self.current_player.tile_index].rent):
                 self.current_player.lost = True
             else:
@@ -189,9 +189,9 @@ class Game:
             # check if past go
             self.current_player.tile_index = (self.current_player.tile_index + move) % 40
 
-            newTile = self.board[self.current_player.tile_index]
+            new_tile = self.board[self.current_player.tile_index]
 
-            self.handleNewTileType(self, newTile)
+            self.handleNewTileType(new_tile)
 
             if index == self.player_count:
                 index = -1
