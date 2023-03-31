@@ -185,11 +185,11 @@ class Game:
         self.current_player.money += 500
 
     def handle_GO(self):
-        # increment trips around board ... somehow
-        # must only do for the first player to do so
-        # going to need some logic for whether or not
-        # a player is the first to go around the board
-        # something, something, then do self.trip_around_board += 1
+        # TODO: increment trips around board ... somehow
+        #  must only do for the first player to do so
+        #  going to need some logic for whether or not
+        #  a player is the first to go around the board
+        #  something, something, then do self.trip_around_board += 1
 
         # also give the player 200 bucks
         self.current_player.money += 200
