@@ -7,11 +7,12 @@ import random
 COMP3531 - Simulation & Modelling
 Final Project - Monopoly
 
-Andrew Mackenzie
 Wallace Mackenzie Chase
+Andrew Mackenzie
 """
 
- # init a board
+ # initiates a board by setting up an array of all the tiles objects
+ # one tile object for each tile on the board
 def createBoard():
     go = Tile(0, "GO", 0, 0)
     mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2)
@@ -78,33 +79,34 @@ def createBoard():
 
 
 class Game:
-    # init a game
-    def __init__(self, number_of_players):
-        self.turnCount = 0
-        self.playerList = []
-        self.currentPlayer = None
+
+    # initiates the game by setting up the board and players
+    # initializes the instance variables for the game object
+    def __init__(self, player_count):
+        self.turn_count = 0
+        self.player_list = []
+        self.current_player = None
         self.board = createBoard()
         self.winner = None
         self.trip_around_board = 0
 
-        for i in range(number_of_players):
-            player = Player()
-            self.playerList.append(player)            
-    
-    def enoughFunds(player, tile):
-        if (player.money >= tile.cost):
+        # pythonic way of creating a list of player objects
+        [self.player_list.append(Player()) for _ in range(player_count)]
+
+    def enoughFunds(self, player, tile):
+        if player.money >= tile.cost:
             return True
         else:
             return False
 
-    def chooseToBuy():
+    def chooseToBuy(self):
         decisionToBuy = np.random.random()
         if decisionToBuy > 0.30:
             return True
         else:
             return False
 
-    def buyProperty(player, property):
+    def buyProperty(self, player, property):
         propertyCost = property.cost
         player.money -= propertyCost
         player.properties.append(property)
@@ -112,10 +114,10 @@ class Game:
     def auctionOff(self, player, property):
         propertyCost = property.cost
         otherPlayers = []
-        for i in range(len(self.playerList)):
-            if self.playerList[i] != player:
-                if self.playerList[i].money >= propertyCost:
-                    otherPlayers.append(self.playerList[i])
+        for i in range(len(self.player_list)):
+            if self.player_list[i] != player:
+                if self.player_list[i].money >= propertyCost:
+                    otherPlayers.append(self.player_list[i])
 
         buyer = random.choice(otherPlayers)
         self.buyProperty(buyer, property)
@@ -123,27 +125,27 @@ class Game:
     def handlePropertyTile(self, newTile):
         # TODO Fix
         if (newTile.bought):
-            if (self.currentPlayer.money < self.board[self.currentPlayer.place].rent):
-                    self.currentPlayer.lost = True
+            if (self.current_player.money < self.board[self.current_player.place].rent):
+                    self.current_player.lost = True
             else:
-                if (self.enoughFunds(self.currentPlayer, newTile)):
+                if (self.enoughFunds(self.current_player, newTile)):
                     if self.chooseToBuy():
-                        self.buyProperty(self.currentPlayer, newTile)
+                        self.buyProperty(self.current_player, newTile)
                     else:
                         if (houseRules):
                             return
                         else:
-                            self.auctionOff(self.currentPlayer, newTile)
+                            self.auctionOff(self.current_player, newTile)
                         
-    def handleRailroad():
+    def handleRailroad(self):
         
-    def handleUtility():
+    def handleUtility(self):
     
-    def handleTax():
+    def handleTax(self):
         
-    def handleParking():
+    def handleParking(self):
     
-    def handleGO():
+    def handleGO(self):
         
     
     def handleNewTileType(self, newTile):
@@ -171,25 +173,25 @@ class Game:
     
     # play the game
     def play(self):
-        self.currentPlayer = self.players[0]
+        self.current_player = self.players[0]
         index = 0
         while (game.winner == None):
             
             
             move = rollTwoDice()
             # check if past go
-            self.currentPlayer.place = (self.currentPlayer.place + move) % 40
+            self.current_player.place = (self.current_player.place + move) % 40
 
-            newTile = self.board[self.currentPlayer.place]
+            newTile = self.board[self.current_player.place]
             
             self.handleNewTileType(self, newTile)
             
             if index == self.number_of_players:
                 index = -1
             index += 1
-            self.currentPlayer = self.players[index]
+            self.current_player = self.players[index]
 
-        return self.turnCount, self.trip_around_board, self.winner
+        return self.turn_count, self.trip_around_board, self.winner
 
 class Player:
     def __init__(self):
