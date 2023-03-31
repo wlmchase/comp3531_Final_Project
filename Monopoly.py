@@ -94,25 +94,22 @@ class Game:
         # pythonic way of creating a list of player objects
         [self.players.append(Player()) for _ in range(player_count)]
 
-    def enoughFunds(self, player, tile):
-        if player.money >= tile.cost:
-            return True
-        else:
-            return False
+    def enough_funds(self, player, tile):
+        return player.money >= tile.cost
 
-    def chooseToBuy(self):
+    def choose_to_buy(self):
         decisionToBuy = np.random.random()
         if decisionToBuy > 0.30:
             return True
         else:
             return False
 
-    def buyProperty(self, player, property):
+    def buy_property(self, player, property):
         propertyCost = property.cost
         player.money -= propertyCost
         player.properties.append(property)
 
-    def auctionOff(self, player, property):
+    def auction_off(self, player, property):
         propertyCost = property.cost
         otherPlayers = []
         for i in range(len(self.players)):
@@ -121,63 +118,73 @@ class Game:
                     otherPlayers.append(self.players[i])
 
         buyer = random.choice(otherPlayers)
-        self.buyProperty(buyer, property)
+        self.buy_property(buyer, property)
 
-    def handlePropertyTile(self, new_tile):
+    def handle_property_tile(self, new_tile):
         # TODO Fix
         if new_tile.bought:
             if (self.current_player.money < self.board[self.current_player.tile_index].rent):
                 self.current_player.lost = True
             else:
-                if (self.enoughFunds(self.current_player, new_tile)):
-                    if self.chooseToBuy():
-                        self.buyProperty(self.current_player, new_tile)
+                if (self.enough_funds(self.current_player, new_tile)):
+                    if self.choose_to_buy():
+                        self.buy_property(self.current_player, new_tile)
                     else:
                         if (houseRules):
                             return
                         else:
-                            self.auctionOff(self.current_player, new_tile)
+                            self.auction_off(self.current_player, new_tile)
 
-    def handleRailroad(self):
+    def handle_railroad(self):
         pass
 
-    def handleUtility(self):
+    def handle_utility(self):
         pass
 
-    def handleGoToJail(self):
+    def handle_go_to_jail(self):
         pass
 
-    def handleTax(self):
+    def handle_taxes(self):
         pass
 
-    def handleParking(self):
+    def handle_parking(self):
         pass
 
-    def handleGO(self):
-        pass
+    def handle_GO(self):
+        # increment trips around board ... somehow
+        # must only do for the first player to do so
+        # going to need some logic for whether or not
+        # a player is the first to go around the board
+        # -> self.trip_around_board += 1
 
-    def handleNewTileType(self, new_tile):
+        # also give the player 200 bucks
+        self.current_player.money += 200
+
+    def handle_tile(self, new_tile):
         if new_tile.type == "property":
-            self.handlePropertyTile(new_tile)
+            self.handle_property_tile(new_tile)
         elif new_tile.type == "railroad":
-            self.handleRailroad()
+            self.handle_railroad()
         elif new_tile.type == "go to jail":
-            self.handleGoToJail()
+            self.handle_go_to_jail()
         elif new_tile.type == "chance" or new_tile.type == "chest":
             # do nothing
             return
         elif new_tile.type == "utility":
-            self.handleUtility()
+            self.handle_utility()
         elif new_tile.type == "tax":
-            self.handleTax()
+            self.handle_taxes()
         elif new_tile.type == "parking":
             if houseRules:
-                self.handleParking()
+                self.handle_parking()
             else:
                 # do nothing
                 return
         else:
-            self.handleGO()
+            # this doesn't seem right
+            # you handle go when you pass it
+            # not when you land on it
+            self.handle_GO()
 
     # play the game
     # TODO: handle doubles
@@ -187,12 +194,19 @@ class Game:
             self.current_player = self.players[player_index]
             doubles, roll = roll_two_dice()
 
-            # check if the player passed go
+            # modulate the player's tile_index by 40 to wrap around the board
+            # when the player passes go
             self.current_player.tile_index = (self.current_player.tile_index + roll) % 40
+
+            # if the player passes go, execute the handleGO() function
+            # (if the players tile_index is less than the roll, then the player passed go)
+            # (because the player must have then spent at least 1 placement increment on the last trip around the board)
+            if self.current_player.tile_index < roll:
+                self.handle_GO()
 
             # set new_tile to the tile the player landed on and handle the tile
             new_tile = self.board[self.current_player.tile_index]
-            self.handleNewTileType(new_tile)
+            self.handle_tile(new_tile)
 
             # set player_index to the next player
             player_index = (player_index + 1) % self.player_count
