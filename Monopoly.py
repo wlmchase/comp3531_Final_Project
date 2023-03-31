@@ -123,20 +123,20 @@ class Game:
         buyer = random.choice(otherPlayers)
         self.buyProperty(buyer, property)
 
-    def handlePropertyTile(self, newTile):
+    def handlePropertyTile(self, new_tile):
         # TODO Fix
-        if newTile.bought:
+        if new_tile.bought:
             if (self.current_player.money < self.board[self.current_player.tile_index].rent):
                 self.current_player.lost = True
             else:
-                if (self.enoughFunds(self.current_player, newTile)):
+                if (self.enoughFunds(self.current_player, new_tile)):
                     if self.chooseToBuy():
-                        self.buyProperty(self.current_player, newTile)
+                        self.buyProperty(self.current_player, new_tile)
                     else:
                         if (houseRules):
                             return
                         else:
-                            self.auctionOff(self.current_player, newTile)
+                            self.auctionOff(self.current_player, new_tile)
 
     def handleRailroad(self):
         pass
@@ -181,22 +181,20 @@ class Game:
 
     # play the game
     def play(self):
-        self.current_player = self.players[0]
-        index = 0
+        player_index = 0
         while game.winner is None:
+            self.current_player = self.players[player_index]
 
             move = rollTwoDice()
-            # check if past go
-            self.current_player.tile_index = (self.current_player.tile_index + move) % 40
+            # check if the player passed go
+            self.current_player.tile_index = (self.current_player.tile_index + move[1]) % 40
 
+            # set new_tile to the tile the player landed on and handle the tile
             new_tile = self.board[self.current_player.tile_index]
-
             self.handleNewTileType(new_tile)
 
-            if index == self.player_count:
-                index = -1
-            index += 1
-            self.current_player = self.players[index]
+            # set player_index to the next player
+            player_index = (player_index + 1) % self.player_count
 
         return self.turn_count, self.trip_around_board, self.winner
 
@@ -224,7 +222,7 @@ def rollDice():
     return np.random.randint(1, 7)
 
 
-# roll two 6-sided die  and return whether or not they were doubles, and the total
+# roll two 6-sided die and return whether or not they were doubles, and the total
 def rollTwoDice():
     doubles = False
     roll1 = rollDice()
