@@ -98,26 +98,23 @@ class Game:
         return player.money >= tile.cost
 
     def choose_to_buy(self):
-        decisionToBuy = np.random.random()
-        if decisionToBuy > 0.30:
-            return True
-        else:
-            return False
+        # player has a randomized 70% chance
+        # of buying the property
+        decision_to_buy = np.random.random()
+        return decision_to_buy > 0.30
 
     def buy_property(self, player, property):
-        propertyCost = property.cost
-        player.money -= propertyCost
+        player.money -= property.cost
         player.properties.append(property)
 
     def auction_off(self, player, property):
-        propertyCost = property.cost
-        otherPlayers = []
+        other_players = []
         for i in range(len(self.players)):
             if self.players[i] != player:
-                if self.players[i].money >= propertyCost:
-                    otherPlayers.append(self.players[i])
+                if self.players[i].money >= property.cost:
+                    other_players.append(self.players[i])
 
-        buyer = random.choice(otherPlayers)
+        buyer = random.choice(other_players)
         self.buy_property(buyer, property)
 
     def handle_property_tile(self, new_tile):
@@ -148,7 +145,8 @@ class Game:
         pass
 
     def handle_parking(self):
-        pass
+        # give the player 500 bucks
+        self.current_player.money += 500
 
     def handle_GO(self):
         # increment trips around board ... somehow
