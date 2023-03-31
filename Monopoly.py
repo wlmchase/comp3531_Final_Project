@@ -123,14 +123,14 @@ class Game:
     def handle_property_tile(self, new_tile):
         # TODO Fix
         if new_tile.bought:
-            if (self.current_player.money < self.board[self.current_player.tile_index].rent):
+            if self.current_player.money < self.board[self.current_player.tile_index].rent:
                 self.current_player.lost = True
             else:
-                if (self.enough_funds(self.current_player, new_tile)):
+                if self.enough_funds(self.current_player, new_tile):
                     if self.choose_to_buy():
                         self.buy_property(self.current_player, new_tile)
                     else:
-                        if (houseRules):
+                        if houseRules:
                             return
                         else:
                             self.auction_off(self.current_player, new_tile)
@@ -163,28 +163,27 @@ class Game:
     def handle_tile(self, new_tile):
         if new_tile.type == "property":
             self.handle_property_tile(new_tile)
+            return
         elif new_tile.type == "railroad":
             self.handle_railroad()
+            return
         elif new_tile.type == "go to jail":
             self.handle_go_to_jail()
-        elif new_tile.type == "chance" or new_tile.type == "chest":
-            # do nothing
             return
         elif new_tile.type == "utility":
             self.handle_utility()
+            return
         elif new_tile.type == "tax":
             self.handle_taxes()
-        elif new_tile.type == "parking":
-            if houseRules:
-                self.handle_parking()
-            else:
-                # do nothing
-                return
+            return
+        elif new_tile.type == "parking" and houseRules:
+            # only handle parking if house rules are enabled
+            self.handle_parking()
+            return
+        elif new_tile.type == "chance" or new_tile.type == "chest":
+            return  # do nothing
         else:
-            # this doesn't seem right
-            # you handle go when you pass it
-            # not when you land on it
-            self.handle_GO()
+            return  # do nothing
 
     # play the game
     # TODO: handle doubles
