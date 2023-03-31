@@ -180,14 +180,15 @@ class Game:
             self.handleGO()
 
     # play the game
+    # TODO: handle doubles
     def play(self):
         player_index = 0
         while game.winner is None:
             self.current_player = self.players[player_index]
+            doubles, roll = roll_two_dice()
 
-            move = rollTwoDice()
             # check if the player passed go
-            self.current_player.tile_index = (self.current_player.tile_index + move[1]) % 40
+            self.current_player.tile_index = (self.current_player.tile_index + roll) % 40
 
             # set new_tile to the tile the player landed on and handle the tile
             new_tile = self.board[self.current_player.tile_index]
@@ -218,18 +219,15 @@ class Tile:
 
 
 # roll a 6 sided die
-def rollDice():
+def roll_die():
     return np.random.randint(1, 7)
 
 
 # roll two 6-sided die and return whether or not they were doubles, and the total
-def rollTwoDice():
-    doubles = False
-    roll1 = rollDice()
-    roll2 = rollDice()
-    if roll1 == roll2:
-        doubles = True
-    return doubles, (roll1 + roll2)
+def roll_two_dice():
+    roll1 = roll_die()
+    roll2 = roll_die()
+    return (roll1 == roll2), (roll1 + roll2)
 
 
 ###  Main loop  ###
