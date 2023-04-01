@@ -111,9 +111,9 @@ class Game:
         # deduct the cost of the property from the player's money
         # then add the property to the player's list of properties
         player.money -= property.cost
-        player.properties.append(property)
         property.owner = player
         property.is_owned = True
+        player.properties.append(property)
 
         if property.type == "railroad":
             player.railroads_owned += 1
