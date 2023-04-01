@@ -15,66 +15,66 @@ Andrew Mackenzie
 # initiates a board by setting up an array of all the tiles objects
 # one tile object for each tile on the board
 def createBoard():
-    go = Tile(0, "GO", 0, 0)
-    mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2)
-    chest_1 = Tile(2, "Chance", 0, 0)
-    baltic_ave = Tile(3, "Baltic Ave", 0, 4)
+    go = Tile(0, "GO", 0, 0, "go")
+    mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2, "property")
+    chest_1 = Tile(2, "Chance", 0, 0, "chest")
+    baltic_ave = Tile(3, "Baltic Ave", 0, 4, "property")
 
-    income_tax = Tile(4, "Income Tax", 200, 0)
+    income_tax = Tile(4, "Income Tax", 0, 200, "tax")
 
-    reading_railroad = Tile(5, "Reading Railroad", 200, 25)
+    reading_railroad = Tile(5, "Reading Railroad", 200, 25, "railroad")
 
-    oriental_ave = Tile(6, "Oriental Ave", 100, 6)
-    chance_tile_1 = Tile(7, "Chance", 0, 0)
-    vermont_ave = Tile(8, "Vermont Ave", 100, 6)
-    conn_ave = Tile(9, "Connecticut Ave", 120, 8)
+    oriental_ave = Tile(6, "Oriental Ave", 100, 6, "property")
+    chance_tile_1 = Tile(7, "Chance", 0, 0, "chance")
+    vermont_ave = Tile(8, "Vermont Ave", 100, 6, "property")
+    conn_ave = Tile(9, "Connecticut Ave", 120, 8, "property")
 
-    jail = Tile(10, "Jail", 0, 0)
+    jail = Tile(10, "Jail", 0, 0, "jail")
 
-    st_charles_pl = Tile(11, "St. Charles Place", 140, 10)
-    electric = Tile(12, "Electric", 150, 0)
-    states_ave = Tile(13, "States Ave", 140, 10)
-    virginia_ave = Tile(14, "Virginia Ave", 160, 12)
+    st_charles_pl = Tile(11, "St. Charles Place", 140, 10, "property")
+    electric = Tile(12, "Electric",150, 0, "utility")
+    states_ave = Tile(13, "States Ave", 140, 10, "property")
+    virginia_ave = Tile(14, "Virginia Ave", 160, 12, "property")
 
-    penn_railroad = Tile(15, "Pennsylvania Railroad", 200, 25)
+    penn_railroad = Tile(15, "Pennsylvania Railroad", 200, 25, "railroad")
 
-    st_james_pl = Tile(16, "St. James Place", 180, 14)
-    chest_2 = Tile(17, "Chest", 0, 0)
-    tenn_ave = Tile(18, "Tennessee Ave", 180, 14)
-    ny_ave = Tile(19, "New York Ave", 200, 16)
+    st_james_pl = Tile(16, "St. James Place", 180, 14, "property")
+    chest_2 = Tile(17, "Chest", 0, 0, "chest")
+    tenn_ave = Tile(18, "Tennessee Ave", 180, 14, "property")
+    ny_ave = Tile(19, "New York Ave", 200, 16, "property")
 
-    free_parking = Tile(20, "Free Parking", 0, 0)
+    free_parking = Tile(20, "Free Parking", 0, 0, "free parking")
 
-    ken_ave = Tile(21, "Kentucky Ave", 220, 18)
-    chance_tile_2 = Tile(22, "Chance", 0, 0)
-    indi_ave = Tile(23, "Indiana Ave", 220, 18)
-    illi_ave = Tile(24, "Illinois Ave", 240, 20)
+    ken_ave = Tile(21, "Kentucky Ave", 220, 18, "property")
+    chance_tile_2 = Tile(22, "Chance", 0, 0, "chance")
+    indi_ave = Tile(23, "Indiana Ave", 220, 18, "property")
+    illi_ave = Tile(24, "Illinois Ave", 240, 20, "property")
 
-    bo_railroad = Tile(25, "B & O Railroad", 200, 25)
+    bo_railroad = Tile(25, "B & O Railroad", 200, 25, "railroad")
 
-    atla_ave = Tile(26, "Atlantic Ave", 260, 22)
-    vent_ave = Tile(27, "Ventnor Ave", 260, 22)
-    water_works = Tile(28, "Water Works", 150, 0)
-    marv_grdn = Tile(29, "Marvin Garden", 280, 24)
+    atla_ave = Tile(26, "Atlantic Ave", 260, 22, "property")
+    vent_ave = Tile(27, "Ventnor Ave", 260, 22, "property")
+    water_works = Tile(28, "Water Works", 150, 0, "utility")
+    marv_grdn = Tile(29, "Marvin Garden", 280, 24, "property")
 
-    goto_jail = Tile(30, "Go To Jail", 0, 0)
+    goto_jail = Tile(30, "Go To Jail", 0, 0, "property")
 
-    pac_ave = Tile(31, "Pacific Ave", 300, 26)
-    ncar_ave = Tile(32, "North Carolina Avenue", 300, 26)
-    chest_3 = Tile(33, "Chance", 0, 0)
-    penn_ave = Tile(34, "Pennsylvania Ave", 320, 28)
+    pac_ave = Tile(31, "Pacific Ave", 300, 26, "property")
+    ncar_ave = Tile(32, "North Carolina Avenue", 300, 26, "property")
+    chest_3 = Tile(33, "Chance", 0, 0, "chance")
+    penn_ave = Tile(34, "Pennsylvania Ave", 320, 28, "property")
 
-    short_line_railroad = Tile(35, "Short Line Railroad", 200, 25)
+    short_line_railroad = Tile(35, "Short Line Railroad", 200, 25, "railroad")
 
-    chance_3 = Tile(36, "Chance", 0, 0)
-    park_pl = Tile(37, "Park Place", 350, 35)
-    lux_tax = Tile(38, "Luxury Tax", 0, 0)
-    boardwalk = Tile(39, "Boardwalk", 400, 50)
+    chance_3 = Tile(36, "Chance", 0, 0, "chance")
+    park_pl = Tile(37, "Park Place", 350, 35, "property")
+    lux_tax = Tile(38, "Luxury Tax", 0, 75, "tax")
+    boardwalk = Tile(39, "Boardwalk", 400, 50, "property")
 
-    return [go, mediterranean_ave, baltic_ave, income_tax, reading_railroad, oriental_ave, chance_tile_1,
+    return [go, mediterranean_ave, chest_1, baltic_ave, income_tax, reading_railroad, oriental_ave, chance_tile_1,
             vermont_ave, conn_ave, jail, st_charles_pl, electric, states_ave, virginia_ave, penn_railroad,
-            st_james_pl, chest_1, tenn_ave, ny_ave, free_parking, ken_ave, chance_tile_2, indi_ave, illi_ave,
-            bo_railroad, atla_ave, vent_ave, water_works, marv_grdn, goto_jail, pac_ave, ncar_ave, chest_2,
+            st_james_pl, chest_2, tenn_ave, ny_ave, free_parking, ken_ave, chance_tile_2, indi_ave, illi_ave,
+            bo_railroad, atla_ave, vent_ave, water_works, marv_grdn, goto_jail, pac_ave, ncar_ave, chest_3,
             penn_ave, short_line_railroad, chance_3, park_pl, lux_tax, boardwalk]
 
 
@@ -284,11 +284,12 @@ class Player:
 
 
 class Tile:
-    def __init__(self, tile_index, name, cost, rent):
+    def __init__(self, tile_index, name, cost, rent, type):
         self.tile_index = tile_index
         self.name = name
         self.cost = cost
         self.rent = rent
+        self.type = type
         self.bought = False
         self.owner = None
 
