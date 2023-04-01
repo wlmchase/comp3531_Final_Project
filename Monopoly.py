@@ -87,9 +87,12 @@ class Game:
         self.players = []
         self.player_count = player_count
         self.current_player = None
+        self.current_roll = -1
         self.board = createBoard()
         self.winner = None
         self.trip_around_board = 0
+        self.all_properties_bought = False
+        self.all_properties_bought_turn_count = 0
 
         # pythonic way of creating a list of player objects
         [self.players.append(Player()) for _ in range(player_count)]
@@ -109,6 +112,11 @@ class Game:
         player.money -= property.cost
         player.properties.append(property)
 
+        if property.type == "railroad":
+            player.railroads_owned += 1
+        elif property.type == "utility":
+            player.utilities_owned += 1
+
     def auction_off(self, property):
         # create a list of players excluding the current player
         possible_buyers = self.players.copy()
@@ -127,60 +135,82 @@ class Game:
         buyer = random.choice(possible_buyers)
         self.buy_property(buyer, property)
 
-    def handle_property_tile(self, new_tile):
-        # if the tile the player lands on is already bought
-        # check if the player has enough money to pay the rent
-        if new_tile.bought:
+    def pay_rent(self, new_tile):
+        rent = new_tile.rent
 
-            # if the player doesn't have enough money to pay the rent
-            # they lose the game
-            if self.current_player.money < self.board[self.current_player.tile_index].rent:
-                self.current_player.lost = True
-                # TODO: remove player from list of players
-                #  and end the game if one player remains
+        # if the property is a railroad
+        # the rent is 25 * 2^(no. of railroads owned by owner - 1)
+        # 1 = 25, 2 = 50, 3 = 100, 4 = 200
+        if new_tile.type == "railroad":
+            rent = 25 * (2 ** (new_tile.owner.railroads_owned - 1))
 
-            # if the player has enough money to pay the rent
-            # deduct the rent from the player's money
-            # and add the rent to the owner's money
-            else:
-                self.current_player.money -= new_tile.rent
-                new_tile.owner.money += new_tile.rent
+        # if the property is a utility
+        # the rent is 4 * dice roll if the owner owns 1 utility
+        # and 10 * dice roll if the owner owns 2 utilities
+        # the dice roll being the roll that the player made
+        # to get to the new tile (both dice)
+        elif new_tile.type == "utility":
+            if new_tile.owner.utilities_owned == 1:
+                rent = 4 * self.current_roll
+            elif new_tile.owner.utilities_owned == 2
+                rent = 10 * self.current_roll
 
-        # if the tile the player lands on is not bought
-        # and the player has enough money to buy it
+        # if the player doesn't have enough money to pay the rent
+        # they lose the game
+        if self.current_player.money < rent:
+            self.current_player.lost = True
+
+        # if the player has enough money to pay the rent
+        # deduct the rent from the player's money
+        # and add the rent to the owner's money
+        else:
+            self.current_player.money -= rent
+            new_tile.owner.money += rent
+
+    def potential_buy(self, new_tile):
+        # if the player has enough money to buy the property
         # and they would like to buy it
         # then the player buys the property
-        elif not new_tile.bought and self.enough_funds(self.current_player, new_tile) and self.choose_to_buy():
+        if self.enough_funds(self.current_player, new_tile) and self.choose_to_buy():
             self.buy_property(self.current_player, new_tile)
 
-        # if the tile the player lands on is not bought
-        # and the player either can't afford the property
+        # if the player either can't afford the property
         # or they don't want to buy it
         # and the house rules are disabled
         # then the property is auctioned off
-        elif not new_tile.bought and not houseRules:
+        elif not houseRules:
             self.auction_off(new_tile)
 
-        # if the tile the player lands on is not bought
-        # and the player can't/won't buy the property
+        # if the player can't/won't buy the property
         # and the house rules are enabled
         # then nothing happens
         else:
             return
 
-    def handle_railroad(self):
-        pass
+    def handle_property_tile(self, new_tile):
+        # if the tile the player lands on is already bought
+        # check if the player has enough money to pay the rent
+        if new_tile.bought:
+            self.pay_rent(new_tile)
 
-    def handle_utility(self):
-        pass
+        # if the tile the player lands on has not been bought
+        # run through the logic to try and buy the property
+        else:
+            self.potential_buy(new_tile)
+
+    def handle_railroad(self, new_tile):
+        self.handle_property_tile(new_tile)
+
+    def handle_utility(self, new_tile):
+        self.handle_property_tile(new_tile)
+
+    def handle_taxes(self, new_tile):
+        self.current_player.money -= new_tile.rent
 
     def handle_go_to_jail(self):
         self.current_player.jailed = True
         self.current_player.doubles_count = 0
         self.current_player.tile_index = 10
-
-    def handle_taxes(self):
-        pass
 
     def handle_parking(self):
         # give the player 500 bucks if house rules are enabled
@@ -201,23 +231,30 @@ class Game:
         if new_tile.type == "property":
             self.handle_property_tile(new_tile)
             return
+
         elif new_tile.type == "railroad":
-            self.handle_railroad()
+            self.handle_railroad(new_tile)
             return
+
         elif new_tile.type == "go to jail":
             self.handle_go_to_jail()
             return
+
         elif new_tile.type == "utility":
-            self.handle_utility()
+            self.handle_utility(new_tile)
             return
+
         elif new_tile.type == "tax":
-            self.handle_taxes()
+            self.handle_taxes(new_tile)
             return
+
         elif new_tile.type == "parking":
             self.handle_parking()
             return
+
         elif new_tile.type == "chance" or new_tile.type == "chest":
             return  # do nothing
+
         else:
             return  # do nothing
 
@@ -232,7 +269,7 @@ class Game:
                 continue
 
             self.current_player = self.players[player_index]
-            doubles, roll = roll_two_dice()
+            doubles, self.current_roll = roll_two_dice()
 
             # if the player rolled doubles, increment the doubles counter
             if self.current_player.jailed and doubles:
@@ -255,12 +292,12 @@ class Game:
 
             # modulate the player's tile_index by 40 to wrap around the board
             # when the player passes go
-            self.current_player.tile_index = (self.current_player.tile_index + roll) % 40
+            self.current_player.tile_index = (self.current_player.tile_index + self.current_roll) % 40
 
             # if the player passes go, execute the handleGO() function
             # (if the players tile_index is less than the roll, then the player passed go)
             # (because the player must have then spent at least 1 placement increment on the last trip around the board)
-            if self.current_player.tile_index < roll:
+            if self.current_player.tile_index < self.current_roll:
                 self.handle_GO()
 
             # set new_tile to the tile the player landed on and handle the tile
@@ -279,6 +316,8 @@ class Player:
         self.properties = []
         self.tile_index = 0
         self.doubles_count = 0
+        self.railroads_owned = 0
+        self.utilities_owned = 0
         self.jailed = False
         self.lost = False
 
