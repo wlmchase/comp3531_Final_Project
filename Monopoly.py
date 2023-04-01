@@ -68,7 +68,7 @@ def createBoard():
 
     chance_3 = Tile(36, "Chance", 0, 0, "chance")
     park_pl = Tile(37, "Park Place", 350, 35, "property")
-    lux_tax = Tile(38, "Luxury Tax", 0, 75, "tax")
+    lux_tax = Tile(38, "Luxury Tax", 0, 100, "tax")
     boardwalk = Tile(39, "Boardwalk", 400, 50, "property")
 
     return [go, mediterranean_ave, chest_1, baltic_ave, income_tax, reading_railroad, oriental_ave, chance_tile_1,
@@ -205,7 +205,14 @@ class Game:
         self.handle_property_tile(new_tile)
 
     def handle_taxes(self, new_tile):
-        self.current_player.money -= new_tile.rent
+        # if the player doesn't have enough money to pay the tax
+        # then they lose the game
+        if not self.enough_funds(self.current_player, new_tile):
+            self.current_player.lost = True
+
+        # otherwise they pay the tax cost listed on the tile
+        else:
+            self.current_player.money -= new_tile.cost
 
     def handle_go_to_jail(self):
         self.current_player.jailed = True
