@@ -152,7 +152,7 @@ class Game:
         elif new_tile.type == "utility":
             if new_tile.owner.utilities_owned == 1:
                 rent = 4 * self.current_roll
-            elif new_tile.owner.utilities_owned == 2
+            elif new_tile.owner.utilities_owned == 2:
                 rent = 10 * self.current_roll
 
         # if the player doesn't have enough money to pay the rent
