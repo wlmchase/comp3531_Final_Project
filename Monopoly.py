@@ -15,7 +15,7 @@ Andrew Mackenzie
 class Player:
     def __init__(self, id):
         self.id = id
-        self.money = 700
+        self.money = 1500
         self.properties = []
         self.tile_index = 0
         self.doubles_count = 0
@@ -294,6 +294,7 @@ class Game:
     def handle_parking(self):
         # give the player 500 bucks if house rules are enabled
         if houseRules:
+            print("IN HOUSE RULES")
             self.current_player.money += 500
 
     def handle_GO(self):
@@ -304,6 +305,7 @@ class Game:
         #  something, something, then do self.trip_around_board += 1
 
         # also give the player 200 bucks
+        print("IN HANDLE GO")
         self.current_player.money += 200
         self.trip_around_board += 1
 
