@@ -183,8 +183,9 @@ class Game:
         pass
 
     def handle_parking(self):
-        # give the player 500 bucks
-        self.current_player.money += 500
+        # give the player 500 bucks if house rules are enabled
+        if houseRules:
+            self.current_player.money += 500
 
     def handle_GO(self):
         # TODO: increment trips around board ... somehow
@@ -212,8 +213,7 @@ class Game:
         elif new_tile.type == "tax":
             self.handle_taxes()
             return
-        elif new_tile.type == "parking" and houseRules:
-            # only handle parking if house rules are enabled
+        elif new_tile.type == "parking":
             self.handle_parking()
             return
         elif new_tile.type == "chance" or new_tile.type == "chest":
