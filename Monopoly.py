@@ -271,7 +271,7 @@ class Game:
     # play the game
     def play(self):
         player_index = 0
-        while game.winner is None:
+        while self.winner is None:
 
             # if the player has lost, skip their turn
             if self.players[player_index].lost:
