@@ -16,10 +16,10 @@ Andrew Mackenzie
 # one tile object for each tile on the board
 def createBoard():
     go = Tile(0, "GO", 0, 0, "go")
+
     mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2, "property")
     chest_1 = Tile(2, "Chance", 0, 0, "chest")
     baltic_ave = Tile(3, "Baltic Ave", 0, 4, "property")
-
     income_tax = Tile(4, "Income Tax", 0, 200, "tax")
 
     reading_railroad = Tile(5, "Reading Railroad", 200, 25, "railroad")
