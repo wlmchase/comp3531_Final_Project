@@ -86,6 +86,7 @@ class Game:
         self.turn_count = 0
         self.players = []
         self.player_count = player_count
+        self.remaining_players = player_count
         self.current_player = None
         self.current_roll = -1
         self.board = createBoard()
@@ -159,6 +160,7 @@ class Game:
         # they lose the game
         if self.current_player.money < rent:
             self.current_player.lost = True
+            self.remaining_players -= 1
 
         # if the player has enough money to pay the rent
         # deduct the rent from the player's money
@@ -209,6 +211,7 @@ class Game:
         # then they lose the game
         if not self.enough_funds(self.current_player, new_tile):
             self.current_player.lost = True
+            self.remaining_players -= 1
 
         # otherwise they pay the tax cost listed on the tile
         else:
@@ -314,6 +317,13 @@ class Game:
             # set player_index to the next player
             player_index = (player_index + 1) % self.player_count
 
+            # if there is only one player left, they are the winner
+            if self.remaining_players == 1:
+                for player in self.players:
+                    if not player.lost:
+                        self.winner = player
+                        break
+
         return self.turn_count, self.trip_around_board, self.winner
 
 
@@ -359,3 +369,5 @@ houseRules = False
 game_type_1_stats = []
 for i in range(N):
     game = Game(player_count)
+    turns, loops, winner = game.play()
+    print("Game", i, "took", turns, "turns and", loops, "loops around the board")
