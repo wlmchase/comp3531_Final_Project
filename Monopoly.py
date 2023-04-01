@@ -224,6 +224,12 @@ class Game:
     def play(self):
         player_index = 0
         while game.winner is None:
+
+            # if the player has lost, skip their turn
+            if self.players[player_index].lost:
+                player_index = (player_index + 1) % self.player_count
+                continue
+
             self.current_player = self.players[player_index]
             doubles, roll = roll_two_dice()
 
