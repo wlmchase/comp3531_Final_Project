@@ -249,6 +249,10 @@ class Game:
                     player_index = (player_index + 1) % self.player_count
                     continue
 
+            # if the player didn't roll doubles, reset the doubles counter
+            else:
+                self.current_player.doubles_count = 0
+
             # modulate the player's tile_index by 40 to wrap around the board
             # when the player passes go
             self.current_player.tile_index = (self.current_player.tile_index + roll) % 40
