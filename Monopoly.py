@@ -175,7 +175,9 @@ class Game:
         pass
 
     def handle_go_to_jail(self):
-        pass
+        self.current_player.jailed = True
+        self.current_player.doubles_count = 0
+        self.current_player.tile_index = 10
 
     def handle_taxes(self):
         pass
@@ -220,7 +222,6 @@ class Game:
             return  # do nothing
 
     # play the game
-    # TODO: handle doubles
     def play(self):
         player_index = 0
         while game.winner is None:
@@ -232,6 +233,21 @@ class Game:
 
             self.current_player = self.players[player_index]
             doubles, roll = roll_two_dice()
+
+            # if the player rolled doubles, increment the doubles counter
+            if self.current_player.jailed and doubles:
+                self.current_player.jailed = False
+
+            # if the player rolled doubles and is not jailed, increment the doubles counter
+            elif doubles:
+                self.current_player.doubles_count += 1
+
+                # if the player rolled doubles 3 times in a row
+                # send them to jail and then skip their turn
+                if self.current_player.doubles_count == 3:
+                    self.handle_go_to_jail()
+                    player_index = (player_index + 1) % self.player_count
+                    continue
 
             # modulate the player's tile_index by 40 to wrap around the board
             # when the player passes go
@@ -258,6 +274,8 @@ class Player:
         self.money = 1500
         self.properties = []
         self.tile_index = 0
+        self.doubles_count = 0
+        self.jailed = False
         self.lost = False
 
 
