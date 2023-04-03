@@ -22,6 +22,7 @@ class Player:
         self.railroads_owned = 0
         self.utilities_owned = 0
         self.jailed = False
+        self.jail_time = 0
         self.lost = False
 
 
@@ -348,8 +349,12 @@ class Game:
             print(str(self.turn_count))
             print("REMAINING PLAYERS: " + str(self.remaining_players))
             print("PLAYER: " +str(self.players[player_index].id))
+            print("TILE: " +str(self.players[player_index].tile_index))
             print("PROPERTIES: " +str(len(self.players[player_index].properties)))
             print("MONEY: " +str(self.players[player_index].money))
+            
+            # if self.players[player_index].money > 10000:
+            #     break
             
             # if the player has lost, skip their turn
             if self.players[player_index].lost:
@@ -360,8 +365,24 @@ class Game:
             doubles, self.current_roll = roll_two_dice()
 
             # if the player rolled doubles, increment the doubles counter
-            if self.current_player.jailed and doubles:
-                self.current_player.jailed = False
+            if self.current_player.jailed:
+                # Check for doubles
+                if doubles:
+                    # reset jail time and jailed status
+                    self.current_player.jail_time = 0
+                    self.current_player.jailed = False
+                else:
+                    # increment jail time
+                    self.current_player.jail_time += 1
+                
+                # if 3 turns in jail and no doubles
+                # pay the $50
+                # reset attributes
+                if self.current_player.jail_time == 3:
+                    self.current_player.money -= 50
+                    self.current_player.jail_time = 0
+                    self.current_player.jailed = False                    
+                    
 
             # if the player rolled doubles and is not jailed, increment the doubles counter
             elif doubles:
@@ -380,12 +401,13 @@ class Game:
 
             # modulate the player's tile_index by 40 to wrap around the board
             # when the player passes go
+            previous_place = self.current_player.tile_index
             self.current_player.tile_index = (self.current_player.tile_index + self.current_roll) % 40
 
             # if the player passes go, execute the handleGO() function
             # (if the players tile_index is less than the roll, then the player passed go)
             # (because the player must have then spent at least 1 placement increment on the last trip around the board)
-            if self.current_player.tile_index < self.current_roll:
+            if self.current_player.tile_index < previous_place:
                 self.handle_GO()
 
             # set new_tile to the tile the player landed on and handle the tile
@@ -422,7 +444,15 @@ def roll_two_dice():
 N = 1
 player_count = 4
 houseRules = False
+turn_data = []
+turns_before_all_props_bought = []
+winners = []
+
 for i in range(N):
     game = Game(player_count)
+    print(str(game))
     turns, loops, winner = game.play()
+    turn_data.append(turns)
+    turns_before_all_props_bought.append(loops)
+    winners.append(winner)
     print("Game", i, "took", turns, "turns and", loops, "loops around the board")
