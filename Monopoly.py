@@ -120,6 +120,7 @@ class Game:
         self.properties_bought_counter = 0
         self.all_properties_bought = False
         self.all_properties_bought_turn_count = 0
+        self.inflation = 0
 
         # pythonic way of creating a list of player objects
         [self.players.append(Player(i)) for i in range(player_count)]
@@ -135,13 +136,14 @@ class Game:
 
     def checkIfAllBought(self):
         if self.properties_bought_counter == 28:
-            print("In All prop bought")
+            #print("In All prop bought")
             self.all_properties_bought = True
             self.all_properties_bought_turn_count = self.trip_around_board
         
     def buy_property(self, player, property):
-        print("In buy property")
-        print(str(player.id))
+        #print("In buy property")
+        #print(str(player.id))
+        
         # deduct the cost of the property from the player's money
         # then add the property to the player's list of properties
         player.money -= property.cost
@@ -157,7 +159,8 @@ class Game:
             player.utilities_owned += 1
 
     def auction_off(self, property):
-        print("In auction")
+        #print("In auction")
+        
         # create a list of players excluding the current player
         possible_buyers = self.players.copy()
         possible_buyers.remove(self.current_player)
@@ -176,8 +179,8 @@ class Game:
         self.buy_property(buyer, property)
 
     def pay_rent(self, new_tile):
-        print("In Pay rent")
-        rent = new_tile.rent
+        #print("In Pay rent")
+        rent = new_tile.rent + new_tile.rent * self.inflation
 
         # if the property is a railroad
         # the rent is 25 * 2^(no. of railroads owned by owner - 1)
@@ -200,10 +203,11 @@ class Game:
         #double rent
         else:
             if self.ownsSet(new_tile):
-                print("DOUBLE RENT")
+                #print("DOUBLE RENT")
                 rent = 2 * rent
         
-        print("RENT: " + str(rent)) 
+        #print("RENT: " + str(rent)) 
+
         # if the player doesn't have enough money to pay the rent
         # they lose the game
         if self.current_player.money < rent:
@@ -260,9 +264,9 @@ class Game:
         # if the tile the player lands on is already bought
         # check if the player has enough money to pay the rent
         if new_tile.bought:
-            print(str(new_tile.name))
-            print(str(new_tile.bought))
-            print(str(new_tile.owner.id))
+            # print(str(new_tile.name))
+            # print(str(new_tile.bought))
+            # print(str(new_tile.owner.id))
             self.pay_rent(new_tile)
 
         # if the tile the player lands on has not been bought
@@ -295,7 +299,7 @@ class Game:
     def handle_parking(self):
         # give the player 500 bucks if house rules are enabled
         if houseRules:
-            print("IN HOUSE RULES")
+            #print("IN HOUSE RULES")
             self.current_player.money += 500
 
     def handle_GO(self):
@@ -306,7 +310,7 @@ class Game:
         #  something, something, then do self.trip_around_board += 1
 
         # also give the player 200 bucks
-        print("IN HANDLE GO")
+        #print("IN HANDLE GO")
         self.current_player.money += 200
         self.trip_around_board += 1
 
@@ -346,12 +350,14 @@ class Game:
         player_index = 0
         while self.winner is None:
             
-            print(str(self.turn_count))
-            print("REMAINING PLAYERS: " + str(self.remaining_players))
-            print("PLAYER: " +str(self.players[player_index].id))
-            print("TILE: " +str(self.players[player_index].tile_index))
-            print("PROPERTIES: " +str(len(self.players[player_index].properties)))
-            print("MONEY: " +str(self.players[player_index].money))
+            if self.turn_count % 25 == 0:
+                self.inflation += 10
+            # print(str(self.turn_count))
+            # print("REMAINING PLAYERS: " + str(self.remaining_players))
+            # print("PLAYER: " +str(self.players[player_index].id))
+            # print("TILE: " +str(self.players[player_index].tile_index))
+            # print("PROPERTIES: " +str(len(self.players[player_index].properties)))
+            # print("MONEY: " +str(self.players[player_index].money))
             
             # if self.players[player_index].money > 10000:
             #     break
@@ -426,7 +432,7 @@ class Game:
                     
             self.turn_count += 1
             
-        return self.turn_count, self.all_properties_bought_turn_count, self.winner
+        return self.turn_count, self.all_properties_bought_turn_count, self.winner.id
 
 # roll a 6 sided die
 def roll_die():
@@ -441,7 +447,7 @@ def roll_two_dice():
 
 
 ###  Main loop  ###
-N = 1
+N = 50000
 player_count = 4
 houseRules = False
 turn_data = []
@@ -450,9 +456,20 @@ winners = []
 
 for i in range(N):
     game = Game(player_count)
-    print(str(game))
+    #print(str(game))
     turns, loops, winner = game.play()
     turn_data.append(turns)
     turns_before_all_props_bought.append(loops)
     winners.append(winner)
-    print("Game", i, "took", turns, "turns and", loops, "loops around the board")
+    #print("Game", i, "took", turns, "turns and", loops, "loops around the board")
+
+
+plt.hist(winners)
+plt.xlabel("Winner")
+plt.ylabel("won")
+plt.title("PLayer win rate")
+plt.show()
+
+turn_avg = np.mean(turn_data)
+loop_avg = np.mean(turns_before_all_props_bought)
+print(N, "Games", "took on average", turn_avg, "turns and on average ", loop_avg, "loops around the board before all properties bought")
