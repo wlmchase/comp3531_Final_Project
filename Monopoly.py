@@ -116,10 +116,10 @@ class Game:
         self.current_roll = -1
         self.board = createBoard()
         self.winner = None
-        self.trip_around_board = 0
+        self.trip_around_board = -1
         self.properties_bought_counter = 0
         self.all_properties_bought = False
-        self.all_properties_bought_turn_count = 0
+        self.all_properties_bought_turn_count = -1
         self.inflation = 0
 
         # pythonic way of creating a list of player objects
@@ -135,6 +135,7 @@ class Game:
         return decision_to_buy > 0.30
 
     def checkIfAllBought(self):
+        #print("Properties bought" + str(self.properties_bought_counter))
         if self.properties_bought_counter == 28:
             #print("In All prop bought")
             self.all_properties_bought = True
@@ -350,8 +351,8 @@ class Game:
         player_index = 0
         while self.winner is None:
             
-            if self.turn_count % 25 == 0:
-                self.inflation += 10
+            if self.turn_count % 50 == 0:
+                self.inflation += 1
             # print(str(self.turn_count))
             # print("REMAINING PLAYERS: " + str(self.remaining_players))
             # print("PLAYER: " +str(self.players[player_index].id))
@@ -431,7 +432,8 @@ class Game:
                         break
                     
             self.turn_count += 1
-            
+        
+        #print(self.all_properties_bought_turn_count) 
         return self.turn_count, self.all_properties_bought_turn_count, self.winner.id
 
 # roll a 6 sided die
@@ -449,14 +451,13 @@ def roll_two_dice():
 ###  Main loop  ###
 N = 50000
 player_count = 4
-houseRules = False
+houseRules = True
 turn_data = []
 turns_before_all_props_bought = []
 winners = []
 
 for i in range(N):
     game = Game(player_count)
-    #print(str(game))
     turns, loops, winner = game.play()
     turn_data.append(turns)
     turns_before_all_props_bought.append(loops)
@@ -467,7 +468,8 @@ for i in range(N):
 plt.hist(winners)
 plt.xlabel("Winner")
 plt.ylabel("won")
-plt.title("PLayer win rate")
+plt.title("Player win rate")
+plt.xticks([0, 1, 2, 3], [1, 2, 3, 4])
 plt.show()
 
 turn_avg = np.mean(turn_data)
