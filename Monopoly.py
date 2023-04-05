@@ -468,10 +468,17 @@ for i in range(N):
 plt.hist(winners)
 plt.xlabel("Winner")
 plt.ylabel("won")
-plt.title("Player win rate")
+if houseRules:
+    plt.title("Player win rate with House Rules")
+else:
+    plt.title("Player win rate without House Rules")
 plt.xticks([0, 1, 2, 3], [1, 2, 3, 4])
 plt.show()
 
 turn_avg = np.mean(turn_data)
 loop_avg = np.mean(turns_before_all_props_bought)
+if houseRules:
+    print("House rules: " + str("ON"))
+else:
+    print("House rules: " + str("OFF"))
 print(N, "Games", "took on average", turn_avg, "turns and on average ", loop_avg, "loops around the board before all properties bought")
