@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 import random
 
 """
@@ -441,7 +440,8 @@ def roll_die():
     return np.random.randint(1, 7)
 
 
-# roll two 6-sided die and return whether or not they were doubles, and the total
+# roll 2 die
+# return boolean for doubles and total
 def roll_two_dice():
     roll1 = roll_die()
     roll2 = roll_die()
