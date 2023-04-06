@@ -10,6 +10,7 @@ Wallace Mackenzie Chase
 Andrew Mackenzie
 """
 
+
 class Player:
     def __init__(self, id):
         self.id = id
@@ -38,61 +39,61 @@ class Tile:
 # initiates a board by setting up an array of all the tiles objects
 # one tile object for each tile on the board
 def createBoard():
-    go = Tile(0, "GO", 0, 0, "go")
+    go = Tile(0, "GO", 0, 0, "go", None)
 
-    mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2, "property")
-    chest_1 = Tile(2, "Chance", 0, 0, "chest")
-    baltic_ave = Tile(3, "Baltic Ave", 0, 4, "property")
-    income_tax = Tile(4, "Income Tax", 0, 200, "tax")
+    mediterranean_ave = Tile(1, "Mediterranean Ave", 60, 2, "property", "purple")
+    chest_1 = Tile(2, "Chance", 0, 0, "chest", None)
+    baltic_ave = Tile(3, "Baltic Ave", 0, 4, "property", "purple")
+    income_tax = Tile(4, "Income Tax", 0, 200, "tax", None)
 
-    reading_railroad = Tile(5, "Reading Railroad", 200, 25, "railroad")
+    reading_railroad = Tile(5, "Reading Railroad", 200, 25, "railroad", None)
 
-    oriental_ave = Tile(6, "Oriental Ave", 100, 6, "property")
-    chance_tile_1 = Tile(7, "Chance", 0, 0, "chance")
-    vermont_ave = Tile(8, "Vermont Ave", 100, 6, "property")
-    conn_ave = Tile(9, "Connecticut Ave", 120, 8, "property")
+    oriental_ave = Tile(6, "Oriental Ave", 100, 6, "property", "grey")
+    chance_tile_1 = Tile(7, "Chance", 0, 0, "chance", None)
+    vermont_ave = Tile(8, "Vermont Ave", 100, 6, "property", "grey")
+    conn_ave = Tile(9, "Connecticut Ave", 120, 8, "property", "grey")
 
-    jail = Tile(10, "Jail", 0, 0, "jail")
+    jail = Tile(10, "Jail", 0, 0, "jail", None)
 
-    st_charles_pl = Tile(11, "St. Charles Place", 140, 10, "property")
-    electric = Tile(12, "Electric",150, 0, "utility")
-    states_ave = Tile(13, "States Ave", 140, 10, "property")
-    virginia_ave = Tile(14, "Virginia Ave", 160, 12, "property")
+    st_charles_pl = Tile(11, "St. Charles Place", 140, 10, "property", "pink")
+    electric = Tile(12, "Electric",150, 0, "utility", None)
+    states_ave = Tile(13, "States Ave", 140, 10, "property", "pink")
+    virginia_ave = Tile(14, "Virginia Ave", 160, 12, "property", "pink")
 
-    penn_railroad = Tile(15, "Pennsylvania Railroad", 200, 25, "railroad")
+    penn_railroad = Tile(15, "Pennsylvania Railroad", 200, 25, "railroad", None)
 
-    st_james_pl = Tile(16, "St. James Place", 180, 14, "property")
-    chest_2 = Tile(17, "Chest", 0, 0, "chest")
-    tenn_ave = Tile(18, "Tennessee Ave", 180, 14, "property")
-    ny_ave = Tile(19, "New York Ave", 200, 16, "property")
+    st_james_pl = Tile(16, "St. James Place", 180, 14, "property", "orange")
+    chest_2 = Tile(17, "Chest", 0, 0, "chest", None)
+    tenn_ave = Tile(18, "Tennessee Ave", 180, 14, "property", "orange")
+    ny_ave = Tile(19, "New York Ave", 200, 16, "property", "orange")
 
-    free_parking = Tile(20, "Free Parking", 0, 0, "free parking")
+    free_parking = Tile(20, "Free Parking", 0, 0, "free parking", None)
 
-    ken_ave = Tile(21, "Kentucky Ave", 220, 18, "property")
-    chance_tile_2 = Tile(22, "Chance", 0, 0, "chance")
-    indi_ave = Tile(23, "Indiana Ave", 220, 18, "property")
-    illi_ave = Tile(24, "Illinois Ave", 240, 20, "property")
+    ken_ave = Tile(21, "Kentucky Ave", 220, 18, "property", "red")
+    chance_tile_2 = Tile(22, "Chance", 0, 0, "chance", None)
+    indi_ave = Tile(23, "Indiana Ave", 220, 18, "property", "red")
+    illi_ave = Tile(24, "Illinois Ave", 240, 20, "property", "red")
 
-    bo_railroad = Tile(25, "B & O Railroad", 200, 25, "railroad")
+    bo_railroad = Tile(25, "B & O Railroad", 200, 25, "railroad", None)
 
-    atla_ave = Tile(26, "Atlantic Ave", 260, 22, "property")
-    vent_ave = Tile(27, "Ventnor Ave", 260, 22, "property")
-    water_works = Tile(28, "Water Works", 150, 0, "utility")
-    marv_grdn = Tile(29, "Marvin Garden", 280, 24, "property")
+    atla_ave = Tile(26, "Atlantic Ave", 260, 22, "property", "yellow")
+    vent_ave = Tile(27, "Ventnor Ave", 260, 22, "property", "yellow")
+    water_works = Tile(28, "Water Works", 150, 0, "utility", None)
+    marv_grdn = Tile(29, "Marvin Garden", 280, 24, "property", "yellow")
 
-    goto_jail = Tile(30, "Go To Jail", 0, 0, "property")
+    goto_jail = Tile(30, "Go To Jail", 0, 0, "go to jail", None)
 
-    pac_ave = Tile(31, "Pacific Ave", 300, 26, "property")
-    ncar_ave = Tile(32, "North Carolina Avenue", 300, 26, "property")
-    chest_3 = Tile(33, "Chance", 0, 0, "chance")
-    penn_ave = Tile(34, "Pennsylvania Ave", 320, 28, "property")
+    pac_ave = Tile(31, "Pacific Ave", 300, 26, "property", "green")
+    ncar_ave = Tile(32, "North Carolina Avenue", 300, 26, "property", "green")
+    chest_3 = Tile(33, "Chance", 0, 0, "chance", None)
+    penn_ave = Tile(34, "Pennsylvania Ave", 320, 28, "property", "green")
 
-    short_line_railroad = Tile(35, "Short Line Railroad", 200, 25, "railroad")
+    short_line_railroad = Tile(35, "Short Line Railroad", 200, 25, "railroad", None)
 
-    chance_3 = Tile(36, "Chance", 0, 0, "chance")
-    park_pl = Tile(37, "Park Place", 350, 35, "property")
-    lux_tax = Tile(38, "Luxury Tax", 0, 100, "tax")
-    boardwalk = Tile(39, "Boardwalk", 400, 50, "property")
+    chance_3 = Tile(36, "Chance", 0, 0, "chance", None)
+    park_pl = Tile(37, "Park Place", 350, 35, "property", "blue")
+    lux_tax = Tile(38, "Luxury Tax", 0, 100, "tax", None)
+    boardwalk = Tile(39, "Boardwalk", 400, 50, "property", "blue")
 
     return [go, mediterranean_ave, chest_1, baltic_ave, income_tax, reading_railroad, oriental_ave, chance_tile_1,
             vermont_ave, conn_ave, jail, st_charles_pl, electric, states_ave, virginia_ave, penn_railroad,
@@ -121,7 +122,7 @@ class Game:
         self.inflation = 0
 
         # pythonic way of creating a list of player objects
-        [self.players.append(Player()) for _ in range(player_count)]
+        [self.players.append(Player(i)) for i in range(player_count)]
 
     def enough_funds(self, player, tile):
         return player.money >= tile.cost
@@ -140,12 +141,17 @@ class Game:
             self.all_properties_bought_turn_count = self.trip_around_board
         
     def buy_property(self, player, property):
+        #print("In buy property")
+        #print(str(player.id))
+        
         # deduct the cost of the property from the player's money
         # then add the property to the player's list of properties
         player.money -= property.cost
-        property.owner = player
-        property.is_owned = True
         player.properties.append(property)
+        property.owner = player
+        property.bought = True
+        self.properties_bought_counter += 1
+        self.checkIfAllBought()
 
         if property.type == "railroad":
             player.railroads_owned += 1
@@ -153,6 +159,8 @@ class Game:
             player.utilities_owned += 1
 
     def auction_off(self, property):
+        #print("In auction")
+        
         # create a list of players excluding the current player
         possible_buyers = self.players.copy()
         possible_buyers.remove(self.current_player)
@@ -171,7 +179,8 @@ class Game:
         self.buy_property(buyer, property)
 
     def pay_rent(self, new_tile):
-        rent = new_tile.rent
+        #print("In Pay rent")
+        rent = new_tile.rent + new_tile.rent * self.inflation
 
         # if the property is a railroad
         # the rent is 25 * 2^(no. of railroads owned by owner - 1)
@@ -190,6 +199,15 @@ class Game:
             elif new_tile.owner.utilities_owned == 2:
                 rent = 10 * self.current_roll
 
+        # check if property owner owns set
+        #double rent
+        else:
+            if self.ownsSet(new_tile):
+                #print("DOUBLE RENT")
+                rent = 2 * rent
+        
+        #print("RENT: " + str(rent)) 
+
         # if the player doesn't have enough money to pay the rent
         # they lose the game
         if self.current_player.money < rent:
@@ -203,6 +221,25 @@ class Game:
             self.current_player.money -= rent
             new_tile.owner.money += rent
 
+    # checks if property owner owns the set
+    def ownsSet(self, property):
+        ownSet = False
+        owner = property.owner
+        prop_color = property.color
+        set_counter = 1
+        for i in range(len(owner.properties)):
+            if owner.properties[i].color == prop_color:
+                set_counter += 1
+        
+        if prop_color == "blue" or prop_color == "purple":
+            if set_counter == 2:
+                ownSet = True
+        else:
+            if set_counter == 3:
+                ownSet = True
+        
+        return ownSet
+        
     def potential_buy(self, new_tile):
         # if the player has enough money to buy the property
         # and they would like to buy it
@@ -227,6 +264,9 @@ class Game:
         # if the tile the player lands on is already bought
         # check if the player has enough money to pay the rent
         if new_tile.bought:
+            # print(str(new_tile.name))
+            # print(str(new_tile.bought))
+            # print(str(new_tile.owner.id))
             self.pay_rent(new_tile)
 
         # if the tile the player lands on has not been bought
@@ -259,6 +299,7 @@ class Game:
     def handle_parking(self):
         # give the player 500 bucks if house rules are enabled
         if houseRules:
+            #print("IN HOUSE RULES")
             self.current_player.money += 500
 
     def handle_GO(self):
@@ -269,7 +310,9 @@ class Game:
         #  something, something, then do self.trip_around_board += 1
 
         # also give the player 200 bucks
+        #print("IN HANDLE GO")
         self.current_player.money += 200
+        self.trip_around_board += 1
 
     def handle_tile(self, new_tile):
         if new_tile.type == "property":
@@ -328,8 +371,24 @@ class Game:
             doubles, self.current_roll = roll_two_dice()
 
             # if the player rolled doubles, increment the doubles counter
-            if self.current_player.jailed and doubles:
-                self.current_player.jailed = False
+            if self.current_player.jailed:
+                # Check for doubles
+                if doubles:
+                    # reset jail time and jailed status
+                    self.current_player.jail_time = 0
+                    self.current_player.jailed = False
+                else:
+                    # increment jail time
+                    self.current_player.jail_time += 1
+                
+                # if 3 turns in jail and no doubles
+                # pay the $50
+                # reset attributes
+                if self.current_player.jail_time == 3:
+                    self.current_player.money -= 50
+                    self.current_player.jail_time = 0
+                    self.current_player.jailed = False                    
+                    
 
             # if the player rolled doubles and is not jailed, increment the doubles counter
             elif doubles:
@@ -348,12 +407,13 @@ class Game:
 
             # modulate the player's tile_index by 40 to wrap around the board
             # when the player passes go
+            previous_place = self.current_player.tile_index
             self.current_player.tile_index = (self.current_player.tile_index + self.current_roll) % 40
 
             # if the player passes go, execute the handleGO() function
             # (if the players tile_index is less than the roll, then the player passed go)
             # (because the player must have then spent at least 1 placement increment on the last trip around the board)
-            if self.current_player.tile_index < self.current_roll:
+            if self.current_player.tile_index < previous_place:
                 self.handle_GO()
 
             # set new_tile to the tile the player landed on and handle the tile
@@ -389,7 +449,7 @@ def roll_two_dice():
 
 
 ###  Main loop  ###
-N = 500
+N = 50000
 player_count = 4
 houseRules = True
 turn_data = []
