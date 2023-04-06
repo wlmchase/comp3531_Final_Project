@@ -351,7 +351,7 @@ class Game:
         while self.winner is None:
             
             if self.turn_count % 50 == 0:
-                self.inflation += 1
+                self.inflation += 3
             # print(str(self.turn_count))
             # print("REMAINING PLAYERS: " + str(self.remaining_players))
             # print("PLAYER: " +str(self.players[player_index].id))
@@ -443,9 +443,9 @@ def roll_die():
 # roll 2 die
 # return boolean for doubles and total
 def roll_two_dice():
-    roll1 = roll_die()
-    roll2 = roll_die()
-    return (roll1 == roll2), (roll1 + roll2)
+    roll_1 = roll_die()
+    roll_2 = roll_die()
+    return (roll_1 == roll_2), (roll_1 + roll_2)
 
 
 ###  Main loop  ###
