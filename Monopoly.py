@@ -10,6 +10,30 @@ Wallace Mackenzie Chase
 Andrew Mackenzie
 """
 
+class Player:
+    def __init__(self, id):
+        self.id = id
+        self.money = 1500
+        self.properties = []
+        self.tile_index = 0
+        self.doubles_count = 0
+        self.railroads_owned = 0
+        self.utilities_owned = 0
+        self.jailed = False
+        self.jail_time = 0
+        self.lost = False
+
+
+class Tile:
+    def __init__(self, tile_index, name, cost, rent, type, color):
+        self.tile_index = tile_index
+        self.name = name
+        self.cost = cost
+        self.rent = rent
+        self.type = type
+        self.color = color
+        self.bought = False
+        self.owner = None
 
 # initiates a board by setting up an array of all the tiles objects
 # one tile object for each tile on the board
