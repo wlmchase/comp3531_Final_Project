@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 import random
 
 """
@@ -91,9 +90,11 @@ class Game:
         self.current_roll = -1
         self.board = createBoard()
         self.winner = None
-        self.trip_around_board = 0
+        self.trip_around_board = -1
+        self.properties_bought_counter = 0
         self.all_properties_bought = False
-        self.all_properties_bought_turn_count = 0
+        self.all_properties_bought_turn_count = -1
+        self.inflation = 0
 
         # pythonic way of creating a list of player objects
         [self.players.append(Player()) for _ in range(player_count)]
@@ -107,6 +108,13 @@ class Game:
         decision_to_buy = np.random.random()
         return decision_to_buy > 0.30
 
+    def checkIfAllBought(self):
+        #print("Properties bought" + str(self.properties_bought_counter))
+        if self.properties_bought_counter == 28:
+            #print("In All prop bought")
+            self.all_properties_bought = True
+            self.all_properties_bought_turn_count = self.trip_around_board
+        
     def buy_property(self, player, property):
         # deduct the cost of the property from the player's money
         # then add the property to the player's list of properties
@@ -274,7 +282,19 @@ class Game:
     def play(self):
         player_index = 0
         while self.winner is None:
-
+            
+            if self.turn_count % 50 == 0:
+                self.inflation += 3
+            # print(str(self.turn_count))
+            # print("REMAINING PLAYERS: " + str(self.remaining_players))
+            # print("PLAYER: " +str(self.players[player_index].id))
+            # print("TILE: " +str(self.players[player_index].tile_index))
+            # print("PROPERTIES: " +str(len(self.players[player_index].properties)))
+            # print("MONEY: " +str(self.players[player_index].money))
+            
+            # if self.players[player_index].money > 10000:
+            #     break
+            
             # if the player has lost, skip their turn
             if self.players[player_index].lost:
                 player_index = (player_index + 1) % self.player_count
@@ -325,51 +345,56 @@ class Game:
                     if not player.lost:
                         self.winner = player
                         break
-
-        return self.turn_count, self.trip_around_board, self.winner
-
-
-class Player:
-    def __init__(self):
-        self.money = 1500
-        self.properties = []
-        self.tile_index = 0
-        self.doubles_count = 0
-        self.railroads_owned = 0
-        self.utilities_owned = 0
-        self.jailed = False
-        self.lost = False
-
-
-class Tile:
-    def __init__(self, tile_index, name, cost, rent, type):
-        self.tile_index = tile_index
-        self.name = name
-        self.cost = cost
-        self.rent = rent
-        self.type = type
-        self.bought = False
-        self.owner = None
-
+                    
+            self.turn_count += 1
+        
+        #print(self.all_properties_bought_turn_count) 
+        return self.turn_count, self.all_properties_bought_turn_count, self.winner.id
 
 # roll a 6 sided die
 def roll_die():
     return np.random.randint(1, 7)
 
 
-# roll two 6-sided die and return whether or not they were doubles, and the total
+# roll 2 die
+# return boolean for doubles and total
 def roll_two_dice():
-    roll1 = roll_die()
-    roll2 = roll_die()
-    return (roll1 == roll2), (roll1 + roll2)
+    roll_1 = roll_die()
+    roll_2 = roll_die()
+    return (roll_1 == roll_2), (roll_1 + roll_2)
 
 
 ###  Main loop  ###
 N = 500
 player_count = 4
-houseRules = False
-game_type_1_stats = []
+houseRules = True
+turn_data = []
+turns_before_all_props_bought = []
+winners = []
+
 for i in range(N):
     game = Game(player_count)
     turns, loops, winner = game.play()
-    print("Game", i, "took", turns, "turns and", loops, "loops around the board")
+    turn_data.append(turns)
+    turns_before_all_props_bought.append(loops)
+    winners.append(winner)
+    #print("Game", i, "took", turns, "turns and", loops, "loops around the board")
+
+
+plt.hist(winners)
+plt.xlabel("Winner")
+plt.ylabel("won")
+if houseRules:
+    plt.title("Player win rate with House Rules")
+else:
+    plt.title("Player win rate without House Rules")
+plt.xticks([0, 1, 2, 3], [1, 2, 3, 4])
+plt.show()
+
+turn_avg = np.mean(turn_data)
+loop_avg = np.mean(turns_before_all_props_bought)
+if houseRules:
+    print("House rules: " + str("ON"))
+else:
+    print("House rules: " + str("OFF"))
+print(N, "Games", "took on average", turn_avg, "turns and on average ", loop_avg, "loops around the board before all properties bought")
