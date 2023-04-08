@@ -124,7 +124,7 @@ class Game:
         decision_to_buy = np.random.random()
         return decision_to_buy > 0.30
 
-    def checkIfAllBought(self):
+    def check_all_props_bought(self):
         """Checks if all properties have been bought.
 
         If all properties have been bought, the all_properties_bought flag is set to True.
@@ -150,7 +150,7 @@ class Game:
         property.owner = player
         property.bought = True
         self.properties_bought_counter += 1
-        self.checkIfAllBought()
+        self.check_all_props_bought()
 
         if property.type == "railroad":
             player.railroads_owned += 1
@@ -413,7 +413,7 @@ class Game:
         player_index = 0
         while self.winner is None:
 
-            # INFLATION
+            # calculate the current inflation rate
             if self.turn_count % 50 == 0:
                 self.inflation += 3
 
@@ -427,6 +427,7 @@ class Game:
 
             # if the player rolled doubles, increment the doubles counter
             if self.current_player.jailed:
+
                 # Check for doubles
                 if doubles:
                     # reset jail time and jailed status
@@ -444,7 +445,7 @@ class Game:
                     self.current_player.jail_time = 0
                     self.current_player.jailed = False
 
-                    # if the player rolled doubles and is not jailed, increment the doubles counter
+            # if the player rolled doubles and is not jailed, increment the doubles counter
             elif doubles:
                 self.current_player.doubles_count += 1
 
@@ -464,7 +465,7 @@ class Game:
             previous_place = self.current_player.tile_index
             self.current_player.tile_index = (self.current_player.tile_index + self.current_roll) % 40
 
-            # if the player passes go, execute the handleGO() function
+            # if the player passes go, execute the handle_GO() function
             # (if the players tile_index is less than the roll, then the player passed go)
             # (because the player must have then spent at least 1 placement increment on the last trip around the board)
             if self.current_player.tile_index < previous_place:
@@ -596,10 +597,12 @@ for i in range(N):
 plt.hist(winners)
 plt.xlabel("Winner")
 plt.ylabel("won")
+
 if house_rules:
     plt.title("Player win rate with House Rules")
 else:
     plt.title("Player win rate without House Rules")
+
 plt.xticks([0, 1, 2, 3], [1, 2, 3, 4])
 plt.show()
 
