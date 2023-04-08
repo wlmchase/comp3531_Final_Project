@@ -564,6 +564,7 @@ def createBoard():
 
 def roll_die():
     """Rolls a die."""
+
     return np.random.randint(1, 7)
 
 
@@ -574,6 +575,7 @@ def roll_two_dice():
         bool: True if doubles, False if not.
         int: The sum of the two dice.
     """
+
     roll_1 = roll_die()
     roll_2 = roll_die()
     return (roll_1 == roll_2), (roll_1 + roll_2)
