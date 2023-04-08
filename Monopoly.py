@@ -278,7 +278,7 @@ class Game:
         # or they don't want to buy it
         # and the house rules are disabled
         # then the property is auctioned off
-        elif not houseRules:
+        elif not house_rules:
             self.auction_off(new_tile)
 
         # if the player can't/won't buy the property
@@ -359,7 +359,7 @@ class Game:
         """Handles the logic for when a player lands on the "Free Parking" tile."""
 
         # give the player 500 bucks if house rules are enabled
-        if houseRules:
+        if house_rules:
             self.current_player.money += 500
 
     def handle_GO(self):
@@ -489,8 +489,6 @@ class Game:
         return self.turn_count, self.all_properties_bought_turn_count, self.winner.id
 
 
-# initiates a board by setting up an array of all the tiles objects
-# one tile object for each tile on the board
 def createBoard():
     """Creates the board.
 
@@ -583,7 +581,7 @@ def roll_two_dice():
 """  Main loop  """
 N = 50000
 player_count = 4
-houseRules = True
+house_rules = True
 turn_data = []
 turns_before_all_props_bought = []
 winners = []
@@ -598,7 +596,7 @@ for i in range(N):
 plt.hist(winners)
 plt.xlabel("Winner")
 plt.ylabel("won")
-if houseRules:
+if house_rules:
     plt.title("Player win rate with House Rules")
 else:
     plt.title("Player win rate without House Rules")
@@ -607,9 +605,8 @@ plt.show()
 
 turn_avg = np.mean(turn_data)
 loop_avg = np.mean(turns_before_all_props_bought)
-if houseRules:
-    print("House rules: " + str("ON"))
-else:
-    print("House rules: " + str("OFF"))
+
+print("House rules: " + "ON" if house_rules else "OFF")
+
 print(N, "Games", "took on average", turn_avg, "turns and on average ", loop_avg,
       "loops around the board before all properties bought")
