@@ -50,15 +50,13 @@ Andrew MacKenzie}
 \clearpage
 
 \section*{\underline{Introduction}}
-For our final project, we decided to do monopoly.
+For our final project, we decided to build a simulation of Monopoly.
 \\
-Our design is relatively simple. We utilized Player, Tile, and Game classes and a main loop to simulate games of Monopoly.
-Games will run until a player has won, or the last player to still have money. We have a HouseRules option to toggle if games use the house rules or not.\\
-One issue we ran into was games running forever as the initial rents are too low. Players are able to make their way around the board and pass GO, collecting \$200 faster than they can lose the money in rent. To resolve this, we just created an inflation variable that increases the rent every 50 turns. This decision was arbitrary and can be changed to observe changes in the results.
+Our design is relatively simple. We utilized ``Player", ``Tile", and ``Game" classes along with a main loop to simulate individual games of Monopoly. These game instances will run until a player has become the only player who avoided bankruptcy and therefore has won. We have a ``house\_rules" option to toggle whether a game instance uses the house rules or not. One issue we ran into was games running forever as the initial rents are too low to eliminate players. Players are able to make their way around the board and pass GO, collecting \$200 faster than they can lose the money in rent. To resolve this, we just created an inflation variable that increases the rent every 50 turns. This decision was arbitrary and can be changed to observe changes in the results. Our base scenario or control, is 50,000 games with 4 players, and an inflation rate of +1 in rent every 50 turns. We then ran the program changing the amount of games, the amount of players, and the inflation rate and observed the changes.
 \\
-Our base scenario or control, is 50,000 games with 4 players, and an inflation rate of +1 in rent every 50 turns.
+We followed the rules of monopoly based on this website (the link in the pdf didn't work): 
 \\
-We then ran the program changing the amount of games, the amount of players, and the inflation rate and observed the changes.
+\url{https://www.monopolyland.com/category/rules/}
 \section*{\underline{Results}}
 \begin{table}[htbp]
 \begin{adjustbox}{width=\textwidth}

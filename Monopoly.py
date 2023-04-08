@@ -412,8 +412,8 @@ class Game:
         while self.winner is None:
 
             # calculate the current inflation rate
-            if self.turn_count % 50 == 0:
-                self.inflation += 3
+            if self.turn_count % inflation_turn == 0:
+                self.inflation += inflation_increase
 
             # if the player has lost, skip their turn
             if self.players[player_index].lost:
@@ -586,7 +586,9 @@ def roll_two_dice():
 """  Main loop  """
 N = 50000
 player_count = 4
-house_rules = True
+house_rules = False
+inflation_turn = 50
+inflation_increase = 1
 turn_data = []
 turns_before_all_props_bought = []
 winners = []
@@ -599,7 +601,7 @@ for i in range(N):
     winners.append(winner)
 
 plt.hist(winners)
-plt.xlabel("Winner")
+plt.xlabel("Player")
 plt.ylabel("Games Won")
 
 if house_rules:
