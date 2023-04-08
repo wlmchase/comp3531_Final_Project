@@ -600,7 +600,7 @@ for i in range(N):
 
 plt.hist(winners)
 plt.xlabel("Winner")
-plt.ylabel("won")
+plt.ylabel("Games Won")
 
 if house_rules:
     plt.title("Player win rate with House Rules")
