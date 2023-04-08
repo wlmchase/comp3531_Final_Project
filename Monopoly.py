@@ -213,19 +213,18 @@ class Game:
             elif new_tile.owner.utilities_owned == 2:
                 rent = 10 * self.current_roll
 
-        # check if property owner owns set
-        # double rent
-        else:
-            if self.set_owned(new_tile):
-                rent = 2 * rent
+        # check if property owner owns the color set,
+        # then double the rent cost
+        elif self.set_owned(new_tile):
+            rent = 2 * rent
 
-        # if the player doesn't have enough money to pay the rent
-        # they lose the game
+        # if the player doesn't have enough money to pay rent,
+        # then they lose the game
         if self.current_player.money < rent:
             self.current_player.lost = True
             self.remaining_players -= 1
 
-        # if the player has enough money to pay the rent
+        # if the player has enough money to pay rent,
         # deduct the rent from the player's money
         # and add the rent to the owner's money
         else:
@@ -242,21 +241,20 @@ class Game:
             bool: Whether the owner of the property owns a set.
         """
 
-        owner = property.owner
-        prop_color = property.color
+        # count the number of properties with the same color
+        # as the property landed on that the owner owns
         set_counter = 1
-        for i in range(len(owner.properties)):
-            if owner.properties[i].color == prop_color:
+        for i in range(len(property.owner.properties)):
+            if property.owner.properties[i].color == property.color:
                 set_counter += 1
 
-        if prop_color == "blue" or prop_color == "purple":
-            if set_counter == 2:
-                return True
+        # if the property color is blue or purple
+        # then the player only needs 2 properties to own a set
+        # otherwise they need 3 properties to own a set
+        if property.color == "blue" or property.color == "purple":
+            return set_counter == 2
         else:
-            if set_counter == 3:
-                return True
-
-        return False
+            return set_counter == 3
 
     def potential_buy(self, new_tile):
         """Checks if the player can/wants to buy a property.
@@ -563,13 +561,17 @@ def createBoard():
 
 
 def roll_die():
-    """Rolls a die."""
+    """Rolls a die.
+
+    Returns:
+        int: The value of the die.
+    """
 
     return np.random.randint(1, 7)
 
 
 def roll_two_dice():
-    """Rolls two dice and returns a boolean for doubles and the total.
+    """Rolls two dice then returns whether the player rolled doubles and the sum.
 
     Returns:
         bool: True if doubles, False if not.
